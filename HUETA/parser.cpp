@@ -54,8 +54,8 @@ namespace queries {
         };
 
     private:
-        bool operation_;
         double amount_;
+        bool operation_;
     };
 
     class PayTax : public ModifyQuery {
