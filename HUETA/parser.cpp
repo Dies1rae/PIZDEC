@@ -60,21 +60,26 @@ namespace queries {
 
     class PayTax : public ModifyQuery {
     public:
-        using ModifyQuery::ModifyQuery;
+        PayTax(Date from, Date to, double taxes_proc)
+            : ModifyQuery(from, to)
+            , taxes_proc_(taxes_proc){
+        }
 
         void Process(BudgetManager& budget) const override {
-            budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{ 1 });
+            budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{ taxes_proc_ });
         }
 
         class Factory : public QueryFactory {
         public:
             std::unique_ptr<Query> Construct(std::string_view config) const override {
                 auto parts = Split(config, ' ');
-                return std::make_unique<PayTax>(Date::FromString(parts[0]), Date::FromString(parts[1]));
+                double tax_proc = std::stod(std::string(parts[2]));
+                return std::make_unique<PayTax>(Date::FromString(parts[0]), Date::FromString(parts[1]), tax_proc);
             }
         };
 
     private:
+        double taxes_proc_;
     };
 
 }  // namespace queries
