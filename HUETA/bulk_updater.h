@@ -15,7 +15,7 @@ struct BulkMoneySpender {
 };
 
 struct BulkTaxApplier {
-    double proc_ = {};
+    double proc_ = 1.0;
 };
 
 class BulkLinearUpdater {
@@ -35,12 +35,15 @@ public:
     }
 
     void CombineWith(const BulkLinearUpdater& other) {
-        add_.delta = add_.delta * ((100 - other.tax_.proc_) / 100) + other.add_.delta;
+        add_.delta = (add_.delta * tax_.proc_) + other.add_.delta;
         spnd_.delta = spnd_.delta + other.spnd_.delta;
     }
 
-    double Collapse(double origin, IndexSegment segment) const {
-        return (origin * ((100 - tax_.proc_) / 100) + add_.delta * static_cast<double>(segment.length())) - spnd_.delta * static_cast<double>(segment.length());
+    Money Collapse(Money origin, IndexSegment segment) const {
+        Money res;
+        res.earn_ = (origin.earn_ * tax_.proc_) + add_.delta * static_cast<double>(segment.length());
+        res.spend_ = origin.spend_ + spnd_.delta * static_cast<double>(segment.length());
+        return res;
     }
 
 private:

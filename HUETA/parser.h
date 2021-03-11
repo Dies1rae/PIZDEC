@@ -13,10 +13,10 @@
 
 struct ReadResult {
     void Print(std::ostream& out) {
-        out << total_income << std::endl;
+        out << total_income.earn_ - total_income.spend_ << std::endl;
     }
 
-    double total_income;
+    Money total_income;
 };
 
 inline std::pair<std::string_view, std::optional<std::string_view>> SplitFirst(std::string_view input, char c) {
