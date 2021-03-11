@@ -66,8 +66,7 @@ namespace queries {
         }
 
         void Process(BudgetManager& budget) const override {
-            double tmp_taxes = 1.0 - (taxes_proc_ / 100);
-            budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{ tmp_taxes });
+            budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{ 1.0 - (taxes_proc_ / 100.0) });
         }
 
         class Factory : public QueryFactory {

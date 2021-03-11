@@ -35,8 +35,9 @@ public:
     }
 
     void CombineWith(const BulkLinearUpdater& other) {
-        add_.delta = (add_.delta * tax_.proc_) + other.add_.delta;
+        add_.delta = (add_.delta * other.tax_.proc_ ) + other.add_.delta;
         spnd_.delta = spnd_.delta + other.spnd_.delta;
+        tax_.proc_ *= other.tax_.proc_;
     }
 
     Money Collapse(Money origin, IndexSegment segment) const {
